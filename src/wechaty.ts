@@ -57,8 +57,12 @@ import {
   isProduction,
   log,
   Raven,
-  VERSION,
 }                       from './config'
+
+import {
+  VERSION,
+  GIT_COMMIT_HASH,
+}                       from './version'
 
 import {
   AnyFunction,
@@ -81,6 +85,7 @@ import {
   ContactSelf,
   Friendship,
   Message,
+  Image,
   Room,
   RoomInvitation,
   UrlLink,
@@ -165,6 +170,7 @@ export class Wechaty extends Accessory implements Sayable {
   public readonly ContactSelf   : typeof ContactSelf
   public readonly Friendship    : typeof Friendship
   public readonly Message       : typeof Message
+  public readonly Image         : typeof Image
   public readonly RoomInvitation: typeof RoomInvitation
   public readonly Room          : typeof Room
   public readonly UrlLink       : typeof UrlLink
@@ -265,16 +271,17 @@ export class Wechaty extends Accessory implements Sayable {
      */
     // TODO: make Message & Room constructor private???
     this.Contact        = cloneClass(Contact)
-    this.Tag            = cloneClass(Tag)
     this.ContactSelf    = cloneClass(ContactSelf)
     this.Friendship     = cloneClass(Friendship)
+    this.Image          = cloneClass(Image)
     this.Message        = cloneClass(Message)
     this.Room           = cloneClass(Room)
     this.RoomInvitation = cloneClass(RoomInvitation)
+    this.Tag            = cloneClass(Tag)
 
-    // No need to set puppet/wechaty, so no need to clone
-    this.UrlLink = UrlLink
-    this.MiniProgram = MiniProgram
+    // No need to set puppet/wechaty, so do not clone
+    this.UrlLink        = UrlLink
+    this.MiniProgram    = MiniProgram
   }
 
   /**
@@ -633,10 +640,6 @@ export class Wechaty extends Accessory implements Sayable {
             await friendship.ready()
             this.emit('friendship', friendship)
             friendship.contact().emit('friendship', friendship)
-
-            // support deprecated event name: friend.
-            // Huan LI 201806
-            this.emit('friend' as any, friendship as any)
           })
           break
 
@@ -769,6 +772,7 @@ export class Wechaty extends Accessory implements Sayable {
     this.Contact.wechaty        = this
     this.ContactSelf.wechaty    = this
     this.Friendship.wechaty     = this
+    this.Image.wechaty          = this
     this.Message.wechaty        = this
     this.Room.wechaty           = this
     this.RoomInvitation.wechaty = this
@@ -780,6 +784,7 @@ export class Wechaty extends Accessory implements Sayable {
     this.Contact.puppet        = puppet
     this.ContactSelf.puppet    = puppet
     this.Friendship.puppet     = puppet
+    this.Image.puppet          = puppet
     this.Message.puppet        = puppet
     this.Room.puppet           = puppet
     this.RoomInvitation.puppet = puppet
@@ -788,16 +793,6 @@ export class Wechaty extends Accessory implements Sayable {
     this.puppet = puppet
   }
 
-  /**
-   * @desc
-   * use {@link Wechaty#start} instead
-   * @deprecated
-   * @ignore
-   */
-  public async init (): Promise<void> {
-    log.warn('Wechaty', 'init() DEPRECATED. use start() instead.')
-    return this.start()
-  }
   /**
    * Start the bot, return Promise.
    *
@@ -1081,12 +1076,9 @@ export class Wechaty extends Accessory implements Sayable {
   /**
    * @ignore
    */
-  public static version (forceNpm = false): string {
-    if (!forceNpm) {
-      const revision = config.gitRevision()
-      if (revision) {
-        return `#git[${revision}]`
-      }
+  public static version (gitHash = false): string {
+    if (gitHash && GIT_COMMIT_HASH) {
+      return `#git[${GIT_COMMIT_HASH}]`
     }
     return VERSION
   }
