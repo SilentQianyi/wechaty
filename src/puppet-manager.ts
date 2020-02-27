@@ -38,13 +38,15 @@ export class PuppetManager {
     let puppetInstance: Puppet
 
     /**
-     * When we are developing, we might experiencing we have two version of wechaty-puppet installed,
-     * if `optoins.puppet` is Puppet v1, but the `Puppet` in Wechaty is v2,
-     * then options.puppet will not instanceof Puppet.
-     * So I changed here to match not a string as a workaround.
-     *  - Huan(202001)
+     * Huan(202001): (DEPRECATED) When we are developing, we might experiencing we have two version of wechaty-puppet installed,
+     *  if `optoins.puppet` is Puppet v1, but the `Puppet` in Wechaty is v2,
+     *  then options.puppet will not instanceof Puppet.
+     *  So I changed here to match not a string as a workaround.
+     *
+     * Huan(202020): The wechaty-puppet-xxx must NOT dependencies `wechaty-puppet` so that it can be `instanceof`-ed
+     *  wechaty-puppet-xxx should put `wechaty-puppet` in `devDependencies` and `peerDependencies`.
      */
-    if (typeof options.puppet !== 'string' /* instanceof Puppet */) {
+    if (options.puppet instanceof Puppet) {
       puppetInstance = await this.resolveInstance(options.puppet)
     } else {
       const MyPuppet = await this.resolveName(options.puppet)
@@ -190,9 +192,9 @@ export class PuppetManager {
     }
 
     // https://github.com/GoogleChrome/puppeteer/issues/1597#issuecomment-351945645
-    if (gfw && !process.env['PUPPETEER_DOWNLOAD_HOST']) {
+    if (gfw && !process.env.PUPPETEER_DOWNLOAD_HOST) {
       log.info('PuppetManager', 'preInstallPuppeteer() set PUPPETEER_DOWNLOAD_HOST=https://npm.taobao.org/mirrors/')
-      process.env['PUPPETEER_DOWNLOAD_HOST'] = 'https://npm.taobao.org/mirrors/'
+      process.env.PUPPETEER_DOWNLOAD_HOST = 'https://npm.taobao.org/mirrors/'
     }
   }
 

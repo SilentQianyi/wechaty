@@ -1,7 +1,8 @@
 export {
-  FileBox,
   ScanStatus,
   UrlLinkPayload,
+  FileBox,
+  MemoryCard,
 }                 from 'wechaty-puppet'
 
 export {

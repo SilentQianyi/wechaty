@@ -25,8 +25,9 @@ import {
   Accessory,
 }                       from '../accessory'
 import {
-  // config,
   FOUR_PER_EM_SPACE,
+  FileBox,
+
   log,
   Raven,
 }                       from '../config'
@@ -39,17 +40,16 @@ import {
 }                       from '../helper-functions/pure/guard-qrcode-value'
 
 import { Contact }        from './contact'
+import { MiniProgram }    from './mini-program'
+import { Message }        from './message'
 import { RoomInvitation } from './room-invitation'
 import { UrlLink }        from './url-link'
-import { MiniProgram }    from './mini-program'
 
 import {
-  FileBox,
   RoomMemberQueryFilter,
   RoomPayload,
   RoomQueryFilter,
 }                         from 'wechaty-puppet'
-import { Message } from './message'
 
 export const ROOM_EVENT_DICT = {
   invite: 'tbw',
@@ -408,7 +408,7 @@ export class Room extends Accessory implements Sayable {
    * const msg = await room.say('Hello world!') // only supported by puppet-padplus
    *
    * // 2. Send media file inside Room
-   * import { FileBox }  from 'wechaty-puppet'
+   * import { FileBox }  from 'wechaty'
    * const fileBox1 = FileBox.fromUrl('https://chatie.io/wechaty/images/bot-qr-code.png')
    * const fileBox2 = FileBox.fromLocal('/tmp/text.txt')
    * await room.say(fileBox1)
@@ -614,7 +614,7 @@ export class Room extends Accessory implements Sayable {
       const textListLength = textList.length
       const varListLength  = varList.length
       if (textListLength - varListLength !== 1) {
-        throw new Error(`Can not say message, invalid Templated String Array.`)
+        throw new Error('Can not say message, invalid Templated String Array.')
       }
       let finalText = ''
 

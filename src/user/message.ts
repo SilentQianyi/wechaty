@@ -21,7 +21,6 @@ import {
 }                       from 'clone-class'
 
 import {
-  FileBox,
   MessagePayload,
   MessageQueryFilter,
   MessageType,
@@ -35,6 +34,8 @@ import {
 }                       from '../accessory'
 import {
   AT_SEPRATOR_REGEX,
+  FileBox,
+
   log,
   Raven,
 }                       from '../config'
@@ -443,7 +444,7 @@ export class Message extends Accessory implements Sayable {
    * @returns {Promise<void | Message>}
    *
    * @example
-   * import { FileBox }  from 'wechaty-puppet'
+   * import { FileBox }  from 'wechaty'
    * const bot = new Wechaty()
    * bot
    * .on('message', async m => {

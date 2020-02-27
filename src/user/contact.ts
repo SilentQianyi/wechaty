@@ -24,16 +24,17 @@ import {
   ContactPayload,
   ContactQueryFilter,
   ContactType,
-  FileBox,
 }                         from 'wechaty-puppet'
 
 import {
   Accessory,
 }                   from '../accessory'
 import {
+  FileBox,
+  Raven,
+
   log,
   qrCodeForChatie,
-  Raven,
 }                   from '../config'
 import {
   Sayable,
@@ -62,6 +63,7 @@ export class Contact extends Accessory implements Sayable {
   protected static get pool () {
     return this[POOL]
   }
+
   protected static set pool (newPool: Map<string, Contact>) {
     if (this === Contact) {
       throw new Error(
@@ -344,7 +346,7 @@ export class Contact extends Accessory implements Sayable {
    *
    * // 2. send media file to contact
    *
-   * import { FileBox }  from 'wechaty-puppet'
+   * import { FileBox }  from 'wechaty'
    * const fileBox1 = FileBox.fromUrl('https://chatie.io/wechaty/images/bot-qr-code.png')
    * const fileBox2 = FileBox.fromFile('/tmp/text.txt')
    * await contact.say(fileBox1)
@@ -752,7 +754,7 @@ export class Contact extends Accessory implements Sayable {
       // log.silly('Contact', `ready() this.puppet.contactPayload(%s) resolved`, this)
 
     } catch (e) {
-      log.verbose('Contact', `ready() this.puppet.contactPayload(%s) exception: %s`,
+      log.verbose('Contact', 'ready() this.puppet.contactPayload(%s) exception: %s',
         this.id,
         e.message,
       )

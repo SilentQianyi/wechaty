@@ -25,22 +25,19 @@ import {
   cloneClass,
   // instanceToClass,
 }                   from 'clone-class'
-
 import {
   callerResolve,
   hotImport,
 }                   from 'hot-import'
-import {
-  MemoryCard,
-}                   from 'memory-card'
 import {
   StateSwitch,
 }                   from 'state-switch'
 
 import {
   CHAT_EVENT_DICT,
-  FileBox,
   Puppet,
+
+  MemoryCard,
 
   PUPPET_EVENT_DICT,
   PuppetEventName,
@@ -52,10 +49,12 @@ import {
   Accessory,
 }                       from './accessory'
 import {
+  FileBox,
+  Raven,
+
   config,
   isProduction,
   log,
-  Raven,
 }                       from './config'
 
 import {
@@ -94,7 +93,7 @@ import {
 export const WECHATY_EVENT_DICT = {
   ...CHAT_EVENT_DICT,
   dong      : 'Should be emitted after we call `Wechaty.ding()`',
-  error     : `Will be emit when there's an Error occurred.`,
+  error     : "Will be emit when there's an Error occurred.",
   heartbeat : 'Will be emited periodly after the Wechaty started. If not, means that the Wechaty had died.',
   ready     : 'All underlined data source are ready for use.',
   start     : 'Will be emitted after the Wechaty had been started.',
@@ -506,11 +505,11 @@ export class Wechaty extends Accessory implements Sayable {
 
     // DEPRECATED for 'friend' event
     if (event as any === 'friend') {
-      log.warn('Wechaty', `on('friend', contact, friendRequest) is DEPRECATED. use on('friendship', friendship) instead`)
+      log.warn('Wechaty', "on('friend', contact, friendRequest) is DEPRECATED. use on('friendship', friendship) instead")
       if (typeof listener === 'function') {
         const oldListener = listener
         listener = (...args: any[]) => {
-          log.warn('Wechaty', `on('friend', contact, friendRequest) is DEPRECATED. use on('friendship', friendship) instead`)
+          log.warn('Wechaty', "on('friend', contact, friendRequest) is DEPRECATED. use on('friendship', friendship) instead")
           oldListener.apply(this, args)
         }
       }
@@ -1030,12 +1029,12 @@ export class Wechaty extends Accessory implements Sayable {
    * await bot.say(contact)
    *
    * // 3. send Image to bot itself from remote url
-   * import { FileBox }  from 'wechaty-puppet'
+   * import { FileBox }  from 'wechaty'
    * const fileBox = FileBox.fromUrl('https://chatie.io/wechaty/images/bot-qr-code.png')
    * await bot.say(fileBox)
    *
    * // 4. send Image to bot itself from local file
-   * import { FileBox }  from 'wechaty-puppet'
+   * import { FileBox }  from 'wechaty'
    * const fileBox = FileBox.fromFile('/tmp/text.jpg')
    * await bot.say(fileBox)
    *

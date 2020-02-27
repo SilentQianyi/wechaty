@@ -1,12 +1,14 @@
 import { instanceToClass } from 'clone-class'
 
 import {
-  FileBox,
   ImageType,
-} from 'wechaty-puppet'
+}                   from 'wechaty-puppet'
 
 import { Accessory } from '../accessory'
-import { log }        from '../config'
+import {
+  FileBox,
+  log,
+}                   from '../config'
 
 export class Image extends Accessory {
 
